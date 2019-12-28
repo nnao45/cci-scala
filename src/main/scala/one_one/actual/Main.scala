@@ -1,4 +1,4 @@
-package one_one
+package one_one.actual
 
 // 文字列内に含まれる文字がユニークか探す
 
