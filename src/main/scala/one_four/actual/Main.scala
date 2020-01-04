@@ -7,16 +7,31 @@ package one_four.actual
 
 object Main extends App {
   val input = io.StdIn.readLine.filter(_ != ' ').toLowerCase
-  var chars = Seq.fill(128)(0)
 
-  def judge: Boolean = {
-    input.toCharArray.foreach(c => {
-      val index = c.toInt
-      val value = chars(index)
-      chars = chars.updated(index, value + 1)
-    })
-    if (chars.count(i => i != 0 && i % 2 != 0) > 1) false else true
+  def isPermutationOfPalindrome(phrase: String): Boolean = {
+    // 与えられた文字列からビットベクトルを作る
+    val bitVector = crateBitVector(phrase)
+    bitVector == 0 | checkExactlyOneBitSet(bitVector)
   }
 
-  println(if (judge) "YES" else "NO")
+  def crateBitVector(phrase: String): Int = {
+    var bitVector = 0
+    phrase.toCharArray.foreach(c => bitVector = toggle(bitVector, c.toInt))
+    bitVector
+  }
+
+  def toggle(bitVector: Int, index: Int): Int = {
+    if (index < 0) return bitVector
+
+    val mask = 1 << index
+    if ((bitVector & mask) == 0) {
+      bitVector | mask
+    } else {
+      bitVector & ~mask
+    }
+  }
+
+  def checkExactlyOneBitSet(bitVector: Int) = (bitVector & (bitVector - 1)) == 0
+
+  println(if (isPermutationOfPalindrome(input)) "YES" else "NO")
 }
